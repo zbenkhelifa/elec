@@ -1,0 +1,588 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Le circuit et l'eau</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: two linked illustrations (eau | électricité) side by side, shared controls + live readouts beneath, then the dictionary and the limits of the analogy */
+:root{
+  --f-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Consolas,monospace;
+
+  --bg:#eef2f3; --surface:#fbfcfc; --surface-2:#f2f5f6; --ink:#14212a; --ink-soft:#52626e; --line:#cfd9de;
+  --accent:#c2255c; --accent-soft:#fbe0ea; --accent-ink:#a61e4d;
+  --water:#2f8fd0; --water-deep:#14598e; --water-hi:#d6f0ff; --water-ink:#14598e;
+  --copper:#b8642a; --copper-ink:#9a4f1c;
+  --sky:#e4f1f8; --sky-top:#c4e0f1; --hill:#d2e3d0; --ground:#cdbb98;
+  --steel:#a7b3bc; --steel-hi:#e6ecf0; --steel-dk:#5d6b77;
+  --brass:#c99a3c; --brass-dk:#8f6a22; --roof:#7a4b35; --concrete:#b6b9b6; --tank:#e9f3f9;
+  --pump:#2e7a6a; --dial:#fbfaf4; --dial-ink:#2a2f33; --needle:#c8322b;
+  --bench:#ece6da; --bench-dot:#d7cebd; --red:#c8322b; --black:#262a2e; --ceramic:#f1ebe0;
+  --mm:#e3b236; --lcd:#bfcbb2; --lcd-ink:#1f2a1d; --on-copper:#ffffff; --bulb:#dfe9ef;
+  --charge:#d9480f; --electron:#1c7ed6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c151b; --surface:#121e26; --surface-2:#0f1a21; --ink:#e4ecf0; --ink-soft:#97a8b3; --line:#243440;
+    --accent:#f06595; --accent-soft:#3a1828; --accent-ink:#f783ac;
+    --water:#3d9fe0; --water-deep:#174f7c; --water-hi:#cfeeff; --water-ink:#74c0fc;
+    --copper:#c4733a; --copper-ink:#e8a06a;
+    --sky:#132531; --sky-top:#0a1720; --hill:#18302b; --ground:#3b3326;
+    --steel:#7f8d98; --steel-hi:#c3ced6; --steel-dk:#44515b;
+    --brass:#b88a33; --brass-dk:#7a5a1c; --roof:#6a3f2c; --concrete:#535a5c; --tank:#1d3442;
+    --pump:#2b8572; --dial:#e8e6dc; --dial-ink:#2a2f33; --needle:#d9362f;
+    --bench:#1b1a17; --bench-dot:#2e2b25; --red:#d8443b; --black:#5a6068; --ceramic:#d9d1c2;
+    --mm:#d4a22a; --lcd:#a3b493; --lcd-ink:#17200f; --on-copper:#ffffff; --bulb:#9fb0ba;
+    --charge:#ff7a3d; --electron:#4dabf7;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c151b; --surface:#121e26; --surface-2:#0f1a21; --ink:#e4ecf0; --ink-soft:#97a8b3; --line:#243440;
+  --accent:#f06595; --accent-soft:#3a1828; --accent-ink:#f783ac;
+  --water:#3d9fe0; --water-deep:#174f7c; --water-hi:#cfeeff; --water-ink:#74c0fc;
+  --copper:#c4733a; --copper-ink:#e8a06a;
+  --sky:#132531; --sky-top:#0a1720; --hill:#18302b; --ground:#3b3326;
+  --steel:#7f8d98; --steel-hi:#c3ced6; --steel-dk:#44515b;
+  --brass:#b88a33; --brass-dk:#7a5a1c; --roof:#6a3f2c; --concrete:#535a5c; --tank:#1d3442;
+  --pump:#2b8572; --dial:#e8e6dc; --dial-ink:#2a2f33; --needle:#d9362f;
+  --bench:#1b1a17; --bench-dot:#2e2b25; --red:#d8443b; --black:#5a6068; --ceramic:#d9d1c2;
+  --mm:#d4a22a; --lcd:#a3b493; --lcd-ink:#17200f; --on-copper:#ffffff; --bulb:#9fb0ba;
+  --charge:#ff7a3d; --electron:#4dabf7;
+  color-scheme:dark;
+}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.55 var(--f-body)}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:clamp(16px,3vw,32px);padding-block:28px 64px;display:grid;gap:22px}
+
+header{display:grid;gap:8px}
+.eyebrow{margin:0;font:700 .78rem var(--f-display);font-stretch:90%;text-transform:uppercase;letter-spacing:.14em;color:var(--accent-ink)}
+h1{margin:0;font-family:var(--f-display);font-stretch:75%;font-weight:800;font-size:clamp(2.3rem,5.5vw,3.8rem);line-height:.95;letter-spacing:-.01em;text-wrap:balance}
+h1 .w{color:var(--water-ink)} h1 .c{color:var(--copper-ink)}
+.lead{margin:0;max-width:66ch;color:var(--ink-soft)}
+h2{margin:0 0 12px;font-family:var(--f-display);font-stretch:80%;font-weight:800;font-size:1.6rem;line-height:1.1;text-wrap:balance}
+h3{margin:0 0 8px;font-family:var(--f-display);font-stretch:85%;font-weight:700;font-size:1.1rem}
+
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:920px){.stage{grid-template-columns:1fr}}
+.panel{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.panel.hydro{--halo:var(--sky)} .panel.elec{--halo:var(--bench)}
+figcaption{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:4px 12px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.tag{font:800 .85rem var(--f-display);font-stretch:85%;text-transform:uppercase;letter-spacing:.1em}
+.hydro .tag{color:var(--water-ink)} .elec .tag{color:var(--copper-ink)}
+.sub{font-size:.88rem;color:var(--ink-soft)}
+.panel svg{display:block;width:100%;height:auto}
+
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px 28px;padding:18px 20px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.ctl{display:grid;gap:6px;min-width:0}
+.ctl-l{display:flex;flex-direction:column;line-height:1.25}
+.ctl-e{font-weight:700}
+.ctl-h{font-size:.9rem;color:var(--water-ink)}
+.ctl-row{display:flex;align-items:center;gap:12px}
+input[type=range]{flex:1;min-width:0;accent-color:var(--accent);height:28px}
+output{font:700 1rem var(--f-mono);min-width:6.5ch;text-align:right;font-variant-numeric:tabular-nums}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+button{font:700 .92rem var(--f-body);color:var(--ink);background:var(--surface-2);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:var(--ink-soft)}
+button:focus-visible,tr:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.state{display:inline-flex;align-items:center;gap:8px}
+.state i{width:10px;height:10px;border-radius:50%;background:var(--steel)}
+#bSw[aria-pressed="true"] .state i{background:#2fb35a}
+#bSw[aria-pressed="false"] .state i{background:var(--red)}
+
+.readouts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.ro{padding:14px 18px;border-left:1px solid var(--line);min-width:0}
+.ro:first-child{border-left:0}
+.ro-k{font:700 .74rem var(--f-display);font-stretch:90%;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+.ro-v{font:700 1.75rem/1.2 var(--f-mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.ro-h{font-size:.92rem;color:var(--water-ink)}
+@media (max-width:760px){.readouts{grid-template-columns:repeat(2,minmax(0,1fr))}.ro:nth-child(3){border-left:0}.ro:nth-child(n+3){border-top:1px solid var(--line)}}
+.ohm{margin:0;padding:12px 18px;background:var(--surface-2);border:1px dashed var(--line);border-radius:10px;font:500 .98rem var(--f-mono);overflow-wrap:anywhere}
+.ohm b{color:var(--accent-ink)}
+.note{margin:0;font-size:.92rem;color:var(--ink-soft)}
+#eNote{color:var(--electron)}
+
+.dict{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:620px}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 .76rem var(--f-display);font-stretch:90%;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+th.w{color:var(--water-ink)} th.c{color:var(--copper-ink)}
+td small{display:block;color:var(--ink-soft);font-size:.86rem}
+td.u{font-family:var(--f-mono);font-size:.9rem;white-space:nowrap}
+tr[data-k]{cursor:pointer;transition:background .15s}
+tr[data-k]:hover{background:var(--surface-2)}
+tr.hl,tr.hl:hover{background:var(--accent-soft)}
+
+.limits{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.limits section{padding:18px 20px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.limits ul{margin:0;padding-left:1.1em;display:grid;gap:8px}
+.limits li{max-width:62ch}
+
+/* ---------- SVG ---------- */
+.hill{fill:var(--hill)} .ground{fill:var(--ground)}
+.ref{stroke:var(--ink-soft);stroke-width:1;stroke-dasharray:5 4;opacity:.75}
+.tower line{stroke:var(--steel-dk);stroke-width:4;stroke-linecap:round} .tower .brace{stroke-width:1.6}
+.roof{fill:var(--roof)} .tank{fill:var(--tank);stroke:var(--steel-dk);stroke-width:3}
+.surf{fill:none;stroke:var(--water-hi);stroke-width:1.5;opacity:.8}
+.concrete{fill:var(--concrete);stroke:var(--steel-dk);stroke-width:1}
+.pipe-wall{fill:none;stroke:var(--steel-dk);stroke-width:17;stroke-linejoin:round}
+.pipe-in{fill:none;stroke:var(--water);stroke-width:11;stroke-linejoin:round}
+.stream{stroke:var(--water);stroke-width:5;stroke-linecap:round;opacity:.85}
+.brass{fill:var(--brass);stroke:var(--brass-dk);stroke-width:1.5} .brass-dk{fill:var(--brass-dk)}
+.lever{stroke:var(--red);stroke-width:6;stroke-linecap:round}
+.stem{stroke:var(--steel-dk);stroke-width:3}
+.wheel{fill:none;stroke:var(--red);stroke-width:3.5} .spoke{stroke:var(--red);stroke-width:1.5}
+.window{fill:var(--water);stroke:var(--brass-dk);stroke-width:1} .gate{fill:var(--steel-dk)}
+.bezel{fill:var(--steel-dk)} .dial{fill:var(--dial);stroke:var(--steel);stroke-width:1}
+.tick{stroke:var(--dial-ink);stroke-width:1}
+.needle{stroke:var(--needle);stroke-width:1.8;stroke-linecap:round} .hub{fill:var(--dial-ink)}
+.unit{font:700 7px var(--f-mono);fill:var(--dial-ink);text-anchor:middle}
+.housing{stroke:var(--steel-dk);stroke-width:2}
+.window-w{fill:var(--water-deep);stroke:var(--steel-dk);stroke-width:1.5}
+.blade{fill:none;stroke:var(--steel-hi);stroke-width:3;stroke-linecap:round} .hubc{fill:var(--steel-dk)}
+.motor{fill:var(--pump);stroke:var(--steel-dk);stroke-width:1} .fin{stroke:var(--steel-dk);stroke-width:1;opacity:.55}
+.base{fill:var(--steel-dk)} .imp{stroke:var(--steel-dk);stroke-width:2.5;stroke-linecap:round}
+.dimline{stroke:var(--ink);stroke-width:1.6} .arrhead{fill:var(--ink)}
+.dim{font:700 12px var(--f-mono);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-width:4px;stroke-linejoin:round}
+.lbl,.lbl-end{font:700 12px var(--f-body);fill:var(--ink);text-anchor:middle;paint-order:stroke;stroke:var(--halo);stroke-width:4px;stroke-linejoin:round}
+.lbl-end{text-anchor:end}
+.lbl-in{font:700 10px var(--f-body);fill:var(--water-hi);text-anchor:middle}
+.drop{fill:var(--water-hi);stroke:var(--water-deep);stroke-width:.6;pointer-events:none}
+.chg{fill:var(--charge);pointer-events:none} .chg.el{fill:var(--electron)}
+.benchbg{fill:var(--bench)} .dot{fill:var(--bench-dot)}
+.wire{fill:none;stroke-width:6;stroke-linejoin:round;stroke-linecap:round}
+.wire.red,.lead.red{stroke:var(--red)} .wire.black,.lead.black{stroke:var(--black)}
+.lead{fill:none;stroke-width:2.5;stroke-linejoin:round} .node{fill:var(--steel-dk)}
+.cap{fill:var(--steel)} .batt-band{fill:var(--copper)}
+.pm{font:700 13px var(--f-mono);fill:var(--steel-hi);text-anchor:middle}
+.batt-v{font:700 10px var(--f-mono);fill:var(--on-copper);text-anchor:middle}
+.mm{fill:var(--mm);stroke:var(--steel-dk)} .lcd{fill:var(--lcd)}
+.lcd-t{font:700 13px var(--f-mono);fill:var(--lcd-ink);text-anchor:end}
+.mm-knob{fill:var(--black)} .mm-ptr{stroke:var(--steel-hi);stroke-width:2}
+.mm-v{font:700 9px var(--f-mono);fill:var(--lcd-ink)}
+.ceramic{fill:var(--ceramic);stroke:var(--steel-dk);stroke-width:1}
+.term{fill:var(--brass);stroke:var(--brass-dk)}
+.knife{stroke:var(--steel-dk);stroke-width:4;stroke-linecap:round}
+.rod{stroke:var(--steel);stroke-width:3} .bracket{fill:var(--steel-dk)}
+.coil{stroke:var(--copper);stroke-width:1.5} .coil.off{opacity:.28}
+.cursor{fill:var(--black);stroke:var(--steel)} .wiper{stroke:var(--copper);stroke-width:2}
+.meter{fill:var(--black);stroke:var(--steel-dk)}
+.socket{fill:var(--brass);stroke:var(--brass-dk)} .thread{stroke:var(--brass-dk);stroke-width:1}
+.bulb{fill:var(--bulb);fill-opacity:.55;stroke:var(--steel-dk);stroke-width:1.2}
+.hit{cursor:pointer}
+svg [data-k].hl{filter:drop-shadow(0 0 2px var(--accent)) drop-shadow(0 0 7px var(--accent))}
+
+@media (prefers-reduced-motion: reduce){tr[data-k]{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Électricité · analogie hydraulique</p>
+    <h1>Le circuit et <span class="w">l'eau</span></h1>
+    <p class="lead">Montez le château d'eau, serrez l'étrangleur, fermez la vanne : le circuit électrique réagit exactement de la même façon. Survolez ou cliquez un élément pour voir son équivalent de l'autre côté.</p>
+  </header>
+
+  <div class="stage">
+    <figure class="panel hydro">
+      <figcaption><span class="tag">Modèle hydraulique</span><span class="sub">l'eau circule dans des tuyaux pleins</span></figcaption>
+      <svg id="hSvg" viewBox="0 0 620 420" role="img" aria-labelledby="hT">
+        <title id="hT">Château d'eau alimenté par une pompe, conduite avec vanne, étrangleur, débitmètre et turbine, retour dans un bassin</title>
+        <defs>
+          <linearGradient id="hSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--sky-top)"/><stop offset="1" style="stop-color:var(--sky)"/></linearGradient>
+          <linearGradient id="hWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--water)"/><stop offset="1" style="stop-color:var(--water-deep)"/></linearGradient>
+          <linearGradient id="hMetal" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--steel-hi)"/><stop offset=".55" style="stop-color:var(--steel)"/><stop offset="1" style="stop-color:var(--steel-dk)"/></linearGradient>
+          <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10z" class="arrhead"/></marker>
+        </defs>
+        <g id="hBack"></g>
+        <g id="hParts" data-k="q"></g>
+        <g id="hFront"></g>
+      </svg>
+    </figure>
+
+    <figure class="panel elec">
+      <figcaption><span class="tag">Circuit électrique</span><span class="sub">les charges circulent dans des fils</span></figcaption>
+      <svg id="eSvg" viewBox="0 0 620 420" role="img" aria-labelledby="eT">
+        <title id="eT">Générateur, interrupteur, rhéostat, ampèremètre et lampe en série, voltmètre aux bornes du générateur</title>
+        <defs>
+          <pattern id="dots" width="16" height="16" patternUnits="userSpaceOnUse"><circle cx="8" cy="8" r="1.1" class="dot"/></pattern>
+          <linearGradient id="batt" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--steel-dk)"/><stop offset=".4" style="stop-color:var(--steel-hi)"/><stop offset="1" style="stop-color:var(--steel-dk)"/></linearGradient>
+          <radialGradient id="glow"><stop offset="0" stop-color="#ffd65a" stop-opacity=".9"/><stop offset=".35" stop-color="#ffd65a" stop-opacity=".45"/><stop offset="1" stop-color="#ffd65a" stop-opacity="0"/></radialGradient>
+        </defs>
+        <g id="eBack"></g>
+        <g id="eParts" data-k="q"></g>
+        <g id="eFront"></g>
+      </svg>
+    </figure>
+  </div>
+
+  <div class="controls">
+    <div class="ctl">
+      <label class="ctl-l" for="sU"><span class="ctl-e">Tension du générateur</span><span class="ctl-h">↔ hauteur du château d'eau</span></label>
+      <div class="ctl-row"><input type="range" id="sU" min="1" max="12" step="0.5" value="6"><output id="oU" for="sU">6,0 V</output></div>
+    </div>
+    <div class="ctl">
+      <label class="ctl-l" for="sR"><span class="ctl-e">Résistance du rhéostat</span><span class="ctl-h">↔ serrage de l'étrangleur</span></label>
+      <div class="ctl-row"><input type="range" id="sR" min="0" max="100" step="5" value="20"><output id="oR" for="sR">20 Ω</output></div>
+    </div>
+    <div class="ctl">
+      <span class="ctl-l"><span class="ctl-e">Interrupteur</span><span class="ctl-h">↔ vanne d'arrêt</span></span>
+      <div class="btns"><button id="bSw" type="button" aria-pressed="true"><span class="state"><i></i><span id="swTxt">Fermé · vanne ouverte</span></span></button></div>
+    </div>
+    <div class="ctl">
+      <span class="ctl-l"><span class="ctl-e">Ce qui circule</span><span class="ctl-h">l'eau suit toujours le sens conventionnel</span></span>
+      <div class="btns">
+        <button id="bConv" type="button" aria-pressed="true">Sens conventionnel</button>
+        <button id="bEl" type="button" aria-pressed="false">Électrons</button>
+        <button id="bRun" type="button" aria-pressed="false">Pause</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="readouts" aria-live="polite">
+    <div class="ro"><div class="ro-k">Tension U</div><div class="ro-v" id="rU"></div><div class="ro-h" id="rUh"></div></div>
+    <div class="ro"><div class="ro-k">Intensité I</div><div class="ro-v" id="rI"></div><div class="ro-h" id="rIh"></div></div>
+    <div class="ro"><div class="ro-k">Résistance totale</div><div class="ro-v" id="rR"></div><div class="ro-h" id="rRh"></div></div>
+    <div class="ro"><div class="ro-k">Puissance de la lampe</div><div class="ro-v" id="rP"></div><div class="ro-h" id="rPh"></div></div>
+  </div>
+  <p class="ohm" id="ohm"></p>
+  <p class="note" id="eNote" hidden>Mode électrons : les électrons partent de la borne − et rejoignent la borne +, à l'inverse du sens conventionnel du courant (et de l'eau dans le modèle).</p>
+  <p class="note">Convention de la page : 1 V ↔ 1 m de dénivelé, 1 A ↔ 1 L/s de débit. La lampe a une résistance de 20 Ω.</p>
+
+  <section class="dict">
+    <h2>Dictionnaire eau ↔ électricité</h2>
+    <p class="note" style="margin-bottom:12px">Survolez une ligne pour la repérer dans les deux schémas, cliquez pour la garder en surbrillance.</p>
+    <div class="tbl">
+      <table>
+        <thead><tr><th class="w">Hydraulique</th><th class="c">Électricité</th><th>Unité</th></tr></thead>
+        <tbody>
+          <tr tabindex="0" data-k="gen"><td>Pompe<small>remonte l'eau en haut du château d'eau</small></td><td>Générateur (pile)<small>remet les charges en mouvement</small></td><td class="u">—</td></tr>
+          <tr tabindex="0" data-k="u"><td>Dénivelé Δh entre les deux niveaux d'eau<small>se lit avec une règle de niveau</small></td><td>Tension U entre deux points<small>se mesure au voltmètre, branché en dérivation</small></td><td class="u">volt (V)</td></tr>
+          <tr tabindex="0" data-k="i"><td>Débit Q : litres d'eau par seconde<small>se lit sur le débitmètre, placé sur la conduite</small></td><td>Intensité I : charge par seconde<small>se mesure à l'ampèremètre, branché en série</small></td><td class="u">ampère (A)</td></tr>
+          <tr tabindex="0" data-k="r"><td>Étrangleur, filtre plus ou moins serré<small>freine le passage de l'eau</small></td><td>Résistance (rhéostat)<small>freine le passage du courant</small></td><td class="u">ohm (Ω)</td></tr>
+          <tr tabindex="0" data-k="sw"><td>Vanne d'arrêt<small>ouverte : l'eau passe</small></td><td>Interrupteur<small>fermé : le courant passe</small></td><td class="u">—</td></tr>
+          <tr tabindex="0" data-k="load"><td>Turbine entraînée par l'eau<small>récupère l'énergie de la chute</small></td><td>Lampe, moteur (récepteur)<small>convertit l'énergie électrique</small></td><td class="u">watt (W)</td></tr>
+          <tr tabindex="0" data-k="wire"><td>Tuyaux remplis d'eau</td><td>Fils de cuivre remplis de charges libres</td><td class="u">—</td></tr>
+          <tr tabindex="0" data-k="q"><td>Eau qui circule</td><td>Charges électriques qui circulent</td><td class="u">coulomb (C)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="limits">
+    <section>
+      <h3>Ce que l'analogie montre bien</h3>
+      <ul>
+        <li>Le débit est le même en tout point d'une boucle sans dérivation. L'eau ne s'use pas dans la turbine, le courant ne s'use pas dans la lampe.</li>
+        <li>Plus la chute est haute, plus le débit est fort. Plus l'étrangleur est serré, plus il est faible. C'est la loi d'Ohm : I = U / R.</li>
+        <li>Une vanne fermée arrête l'eau partout dans la boucle, pas seulement après elle.</li>
+      </ul>
+    </section>
+    <section>
+      <h3>Où elle s'arrête</h3>
+      <ul>
+        <li>Attention au vocabulaire : un interrupteur <strong>ouvert</strong> bloque le courant, alors qu'une vanne <strong>ouverte</strong> laisse passer l'eau.</li>
+        <li>Coupez un tuyau, l'eau s'échappe. Coupez un fil, les charges restent dans le métal.</li>
+        <li>Les électrons avancent très lentement dans un fil, moins d'un millimètre par seconde. C'est la mise en mouvement qui se propage presque instantanément.</li>
+      </ul>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const RL = 20, IMAX = 12 / RL, PMAX = RL * IMAX * IMAX;
+  const NS = 'http://www.w3.org/2000/svg';
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const st = { U: 6, R: 20, closed: true, elec: false, run: !reduce };
+  const $ = id => document.getElementById(id);
+  const fmt = (n, d = 1) => n.toFixed(d).replace('.', ',');
+  const cur = () => st.closed ? st.U / (st.R + RL) : 0;
+
+  function wave(x1, x2, y) {
+    let d = `M${x1} ${y}`, up = true;
+    for (let x = x1; x < x2; x += 8) { const nx = Math.min(x + 8, x2); d += ` Q${(x + nx) / 2} ${y + (up ? -2 : 2)} ${nx} ${y}`; up = !up; }
+    return d;
+  }
+  function ticks(cx, cy, r1, r2) {
+    let s = '';
+    for (let k = 0; k <= 6; k++) {
+      const a = (-120 + 40 * k) * Math.PI / 180;
+      s += `<line x1="${(cx + r1 * Math.sin(a)).toFixed(1)}" y1="${(cy - r1 * Math.cos(a)).toFixed(1)}" x2="${(cx + r2 * Math.sin(a)).toFixed(1)}" y2="${(cy - r2 * Math.cos(a)).toFixed(1)}" class="tick"/>`;
+    }
+    return s;
+  }
+  function needle(cx, cy, L, frac) {
+    const a = (-120 + 240 * Math.max(0, Math.min(1, frac))) * Math.PI / 180;
+    return `<line x1="${cx}" y1="${cy}" x2="${(cx + L * Math.sin(a)).toFixed(1)}" y2="${(cy - L * Math.cos(a)).toFixed(1)}" class="needle"/><circle cx="${cx}" cy="${cy}" r="2" class="hub"/>`;
+  }
+
+  /* ---------- hydraulique ---------- */
+  function geo() {
+    const yb = 350, ys = yb - 20 * st.U, tT = ys - 18, tB = ys + 56;
+    return { yb, ys, tT, tB, yo: tB - 14, yr: tT - 24 };
+  }
+  function hydroBack(g, i) {
+    const { yb, ys, tT, tB, yo, yr } = g;
+    let s = `<rect width="620" height="405" fill="url(#hSky)"/>
+      <path d="M0 300 C90 262 170 288 250 276 C340 262 420 296 520 270 C570 258 600 266 620 262 V405 H0Z" class="hill"/>
+      <rect y="404" width="620" height="16" class="ground"/>
+      <line x1="8" x2="432" y1="${yb}" y2="${yb}" class="ref"/>
+      <line x1="8" x2="40" y1="${ys}" y2="${ys}" class="ref"/>`;
+    if (tB < 396) {
+      const lx = y => 52 - 8 * (y - tB) / (404 - tB), rx = y => 138 + 8 * (y - tB) / (404 - tB);
+      s += `<g class="tower"><line x1="52" y1="${tB}" x2="44" y2="404"/><line x1="138" y1="${tB}" x2="146" y2="404"/>`;
+      let prev = tB;
+      for (let y = tB + 44; y < 400; y += 44) {
+        s += `<line class="brace" x1="${lx(prev).toFixed(1)}" y1="${prev}" x2="${rx(y).toFixed(1)}" y2="${y}"/><line class="brace" x1="${rx(prev).toFixed(1)}" y1="${prev}" x2="${lx(y).toFixed(1)}" y2="${y}"/>`;
+        prev = y;
+      }
+      s += `</g>`;
+    }
+    s += `<g data-k="u" class="hit">
+        <path d="M34 ${tT} L95 ${tT - 15} L156 ${tT} Z" class="roof"/>
+        <rect x="40" y="${tT}" width="110" height="74" rx="3" class="tank"/>
+        <rect x="43" y="${ys}" width="104" height="${tB - ys - 3}" fill="url(#hWater)"/>
+        <path d="${wave(43, 147, ys)}" class="surf"/>
+        <text x="95" y="${tB - 9}" class="lbl-in">Réservoir haut</text>
+      </g>
+      <g data-k="u" class="hit"><rect x="440" y="${yb}" width="75" height="48" fill="url(#hWater)"/><path d="${wave(440, 515, yb)}" class="surf"/></g>
+      <path d="M432 326 H440 V398 H515 V326 H523 V404 H432 Z" class="concrete"/>
+      <text x="477" y="374" class="lbl-in">Bassin bas</text>`;
+    const P = d => `<path d="${d}" class="pipe-wall"/><path d="${d}" class="pipe-in"/>`;
+    s += `<g data-k="wire" class="hit">${P(`M556 368 V${yr} H95 V${tT + 8}`)}${P(`M150 ${yo} H420 V388 H452`)}${P(`M506 390 H540`)}</g>`;
+    if (i > 0) s += `<line x1="95" y1="${tT + 9}" x2="95" y2="${ys}" class="stream"/>`;
+    return s;
+  }
+  function hydroFront(g, i) {
+    const { yb, ys, yo, yr } = g;
+    const c = st.R / 100 * 0.85, op = 1 - st.R / 100, hw = yo - 30 - 8 * op;
+    let blades = '';
+    for (let k = 0; k < 8; k++) blades += `<path d="M382 ${yo} q 7 -8 0 -17" transform="rotate(${45 * k} 382 ${yo})" class="blade"/>`;
+    const yl = Math.min(yo + 42, 416);
+    return `
+      <g data-k="sw" class="hit">
+        <rect x="184" y="${yo - 11}" width="22" height="22" rx="6" class="brass"/>
+        <rect x="191" y="${yo - 17}" width="8" height="7" class="brass-dk"/>
+        ${st.closed ? `<line x1="195" y1="${yo - 19}" x2="230" y2="${yo - 19}" class="lever"/>` : `<line x1="195" y1="${yo - 19}" x2="195" y2="${yo - 52}" class="lever"/>`}
+      </g>
+      <g data-k="r" class="hit">
+        <line x1="250" y1="${yo - 14}" x2="250" y2="${hw.toFixed(1)}" class="stem"/>
+        <ellipse cx="250" cy="${hw.toFixed(1)}" rx="14" ry="4.5" class="wheel"/>
+        <line x1="236" y1="${hw.toFixed(1)}" x2="264" y2="${hw.toFixed(1)}" class="spoke"/>
+        <rect x="244" y="${yo - 24}" width="12" height="11" rx="2" class="brass-dk"/>
+        <rect x="235" y="${yo - 14}" width="30" height="28" rx="5" class="brass"/>
+        <rect x="241" y="${yo - 6}" width="18" height="12" rx="2" class="window"/>
+        <rect x="244" y="${yo - 6}" width="12" height="${(12 * c).toFixed(1)}" class="gate"/>
+      </g>
+      <g data-k="i" class="hit">
+        <rect x="314" y="${yo - 24}" width="8" height="16" class="brass-dk"/>
+        <rect x="307" y="${yo - 11}" width="22" height="22" rx="3" class="brass"/>
+        <circle cx="318" cy="${yo - 38}" r="16" class="bezel"/>
+        <circle cx="318" cy="${yo - 38}" r="13" class="dial"/>
+        ${ticks(318, yo - 38, 9, 12)}
+        <text x="318" y="${yo - 30}" class="unit">L/s</text>
+        ${needle(318, yo - 38, 10, i / IMAX)}
+      </g>
+      <g data-k="load" class="hit">
+        <circle cx="382" cy="${yo}" r="26" fill="url(#hMetal)" class="housing"/>
+        <circle cx="382" cy="${yo}" r="20" class="window-w"/>
+        <g id="hRotor">${blades}</g>
+        <circle cx="382" cy="${yo}" r="4" class="hubc"/>
+      </g>
+      <g data-k="gen" class="hit">
+        <rect x="536" y="399" width="74" height="6" rx="1" class="base"/>
+        <rect x="572" y="372" width="36" height="26" rx="5" class="motor"/>
+        ${[578, 584, 590, 596, 602].map(x => `<line x1="${x}" y1="375" x2="${x}" y2="395" class="fin"/>`).join('')}
+        <circle cx="556" cy="385" r="19" fill="url(#hMetal)" class="housing"/>
+        <g id="hImp">${[0, 72, 144, 216, 288].map(a => `<line x1="556" y1="385" x2="556" y2="372" transform="rotate(${a} 556 385)" class="imp"/>`).join('')}</g>
+        <circle cx="556" cy="385" r="3.5" class="hubc"/>
+      </g>
+      <g data-k="u" class="hit">
+        <line x1="24" y1="${ys + 2}" x2="24" y2="${yb - 2}" class="dimline" marker-start="url(#arr)" marker-end="url(#arr)"/>
+        <text transform="translate(17 ${(ys + yb) / 2}) rotate(-90)" class="dim">Δh = ${fmt(st.U)} m</text>
+      </g>
+      <text x="193" y="${yl}" class="lbl">Vanne</text>
+      <text x="250" y="${yl}" class="lbl">Étrangleur</text>
+      <text x="318" y="${yl}" class="lbl">Débitmètre</text>
+      <text x="382" y="${yl}" class="lbl">Turbine</text>
+      <text x="590" y="364" class="lbl">Pompe</text>
+      <text x="330" y="${yr - 14}" class="lbl">Conduite</text>`;
+  }
+  const hPathD = g => `M556 385 V${g.yr} H95 V${g.ys + 12} L150 ${g.yo} H420 V388 H515 L540 390 H556 Z`;
+
+  /* ---------- électrique ---------- */
+  function elecBack() {
+    const W = (d, c) => `<path d="${d}" class="wire ${c}"/>`;
+    return `<rect width="620" height="420" class="benchbg"/><rect width="620" height="420" fill="url(#dots)"/>
+      <g data-k="wire" class="hit">${W('M520 150 V80 H80 V340 H162', 'red')}${W(st.closed ? 'M194 340 H430' : 'M194 340 H430', 'red')}${W('M430 340 H520 V272', 'black')}</g>
+      <g data-k="u" class="hit"><path d="M572 176 V112 H520" class="lead red"/><path d="M600 244 V306 H520" class="lead black"/>
+        <circle cx="520" cy="112" r="4" class="node"/><circle cx="520" cy="306" r="4" class="node"/></g>
+      <text x="300" y="66" class="lbl">Fils de connexion</text>`;
+  }
+  function elecFront(i) {
+    const P = RL * i * i, b = Math.sqrt(P / PMAX);
+    const cx = 232 + 64 * st.R / 100;
+    let coil = '';
+    for (let x = 232; x <= 296; x += 3) coil += `<line x1="${x}" y1="331" x2="${x + 2}" y2="349" class="coil${x <= cx ? '' : ' off'}"/>`;
+    const fil = b > 0.02 ? `hsl(42 100% ${(32 + 50 * b).toFixed(0)}%)` : 'var(--steel-dk)';
+    return `
+      <g data-k="gen" class="hit">
+        <rect x="512" y="149" width="16" height="12" rx="2" class="cap"/>
+        <rect x="498" y="158" width="44" height="114" rx="8" fill="url(#batt)"/>
+        <rect x="498" y="190" width="44" height="48" class="batt-band"/>
+        <text x="520" y="180" class="pm">+</text><text x="520" y="262" class="pm">−</text>
+        <text x="520" y="218" class="batt-v">${fmt(st.U)} V</text>
+      </g>
+      <text x="488" y="219" class="lbl-end">Générateur</text>
+      <g data-k="u" class="hit">
+        <rect x="558" y="176" width="56" height="68" rx="7" class="mm"/>
+        <rect x="564" y="183" width="44" height="20" rx="2" class="lcd"/>
+        <text x="604" y="198" class="lcd-t">${fmt(st.U)}</text>
+        <circle cx="586" cy="223" r="9" class="mm-knob"/><line x1="586" y1="223" x2="592" y2="216" class="mm-ptr"/>
+        <text x="563" y="240" class="mm-v">V</text>
+      </g>
+      <text x="586" y="262" class="lbl">Voltmètre</text>
+      <g data-k="sw" class="hit">
+        <rect x="152" y="345" width="52" height="9" rx="2" class="ceramic"/>
+        <circle cx="162" cy="340" r="4.5" class="term"/><circle cx="194" cy="340" r="4.5" class="term"/>
+        ${st.closed ? '<line x1="162" y1="340" x2="198" y2="338" class="knife"/>' : '<line x1="162" y1="340" x2="186" y2="312" class="knife"/>'}
+        <circle cx="162" cy="340" r="2" class="hubc"/>
+      </g>
+      <g data-k="r" class="hit">
+        <line x1="226" y1="318" x2="302" y2="318" class="rod"/>
+        <rect x="224" y="314" width="5" height="36" class="bracket"/><rect x="299" y="314" width="5" height="36" class="bracket"/>
+        <rect x="229" y="330" width="70" height="20" rx="9" class="ceramic"/>
+        ${coil}
+        <line x1="${cx.toFixed(1)}" y1="324" x2="${cx.toFixed(1)}" y2="331" class="wiper"/>
+        <rect x="${(cx - 7).toFixed(1)}" y="311" width="14" height="13" rx="2" class="cursor"/>
+      </g>
+      <g data-k="i" class="hit">
+        <circle cx="345" cy="340" r="22" class="meter"/>
+        <circle cx="345" cy="340" r="17" class="dial"/>
+        ${ticks(345, 340, 12, 15)}
+        <text x="345" y="352" class="unit" style="font-size:9px">A</text>
+        ${needle(345, 340, 13, i / IMAX)}
+      </g>
+      <g data-k="load" class="hit">
+        <circle cx="430" cy="296" r="72" fill="url(#glow)" opacity="${b.toFixed(2)}"/>
+        <rect x="421" y="322" width="18" height="24" rx="2" class="socket"/>
+        <line x1="421" y1="329" x2="439" y2="327" class="thread"/><line x1="421" y1="335" x2="439" y2="333" class="thread"/><line x1="421" y1="341" x2="439" y2="339" class="thread"/>
+        <path d="M421 323 C421 314 411 310 410 296 A20 20 0 1 1 450 296 C449 310 439 314 439 323 Z" class="bulb"/>
+        <path d="M421 323 C421 314 411 310 410 296 A20 20 0 1 1 450 296 C449 310 439 314 439 323 Z" fill="#ffe08a" opacity="${(0.75 * b).toFixed(2)}"/>
+        <path d="M426 322 V300 l1.6 -3 l1.6 3 l1.6 -3 l1.6 3 l1.6 -3 V322" fill="none" stroke-width="1.6" stroke-linejoin="round" style="stroke:${fil}"/>
+      </g>
+      <text x="178" y="388" class="lbl">Interrupteur</text>
+      <text x="264" y="388" class="lbl">Rhéostat</text>
+      <text x="345" y="388" class="lbl">Ampèremètre</text>
+      <text x="430" y="388" class="lbl">Lampe</text>`;
+  }
+
+  /* ---------- particules ---------- */
+  const hParts = $('hParts'), eParts = $('eParts');
+  const hPath = document.createElementNS(NS, 'path'); hPath.setAttribute('fill', 'none'); hParts.appendChild(hPath);
+  const ePath = document.createElementNS(NS, 'path'); ePath.setAttribute('fill', 'none'); eParts.appendChild(ePath);
+  ePath.setAttribute('d', 'M520 272 V80 H80 V340 H520 Z');
+  const eLen = ePath.getTotalLength();
+  let hLen = 1;
+  const HN = 72, EN = 58, hDots = [], eDots = [];
+  for (let k = 0; k < HN; k++) { const c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '2.8'); c.setAttribute('class', 'drop'); hParts.appendChild(c); hDots.push(c); }
+  for (let k = 0; k < EN; k++) { const c = document.createElementNS(NS, 'circle'); c.setAttribute('r', '3.4'); c.setAttribute('class', 'chg'); eParts.appendChild(c); eDots.push(c); }
+
+  let hOff = 0, eOff = 0, rot = 0, ir = 0, rotor = null, imp = null, rc = [382, 0];
+  function place() {
+    for (let k = 0; k < HN; k++) { const p = hPath.getPointAtLength(((k / HN + hOff) % 1) * hLen); hDots[k].setAttribute('cx', p.x.toFixed(1)); hDots[k].setAttribute('cy', p.y.toFixed(1)); }
+    for (let k = 0; k < EN; k++) { const p = ePath.getPointAtLength(((k / EN + eOff) % 1) * eLen); eDots[k].setAttribute('cx', p.x.toFixed(1)); eDots[k].setAttribute('cy', p.y.toFixed(1)); }
+    if (rotor) rotor.setAttribute('transform', `rotate(${rot.toFixed(1)} ${rc[0]} ${rc[1]})`);
+    if (imp) imp.setAttribute('transform', `rotate(${ir.toFixed(1)} 556 385)`);
+  }
+
+  /* ---------- surbrillance ---------- */
+  let pinned = null, hov = null;
+  function applyHL() {
+    const k = hov || pinned;
+    document.querySelectorAll('[data-k]').forEach(el => el.classList.toggle('hl', !!k && el.dataset.k === k));
+  }
+
+  /* ---------- rendu ---------- */
+  function render() {
+    const i = cur(), g = geo(), P = RL * i * i;
+    $('hBack').innerHTML = hydroBack(g, i);
+    $('hFront').innerHTML = hydroFront(g, i);
+    hPath.setAttribute('d', hPathD(g)); hLen = hPath.getTotalLength();
+    $('eBack').innerHTML = elecBack();
+    $('eFront').innerHTML = elecFront(i);
+    rotor = $('hRotor'); imp = $('hImp'); rc = [382, g.yo];
+    eDots.forEach(d => d.classList.toggle('el', st.elec));
+
+    $('rU').textContent = fmt(st.U) + ' V';
+    $('rUh').textContent = '↔ dénivelé Δh = ' + fmt(st.U) + ' m';
+    $('rI').textContent = fmt(i, 2) + ' A';
+    $('rIh').textContent = '↔ débit Q = ' + fmt(i, 2) + ' L/s';
+    $('rR').textContent = (st.R + RL) + ' Ω';
+    $('rRh').textContent = '↔ étrangleur ' + st.R + ' Ω + turbine 20 Ω';
+    $('rP').textContent = fmt(P, 2) + ' W';
+    $('rPh').textContent = P === 0 ? '↔ la turbine est à l\'arrêt' : '↔ puissance reçue par la turbine';
+    $('ohm').innerHTML = st.closed
+      ? `<b>Loi d'Ohm</b> · I = U ÷ (R + R<sub>lampe</sub>) = ${fmt(st.U)} ÷ (${st.R} + ${RL}) = <b>${fmt(i, 2)} A</b>`
+      : `<b>Interrupteur ouvert, vanne fermée</b> · plus rien ne circule : I = 0 A, même si la tension reste de ${fmt(st.U)} V.`;
+    $('eNote').hidden = !st.elec;
+    applyHL();
+    place();
+  }
+
+  /* ---------- contrôles ---------- */
+  $('sU').addEventListener('input', e => { st.U = +e.target.value; $('oU').textContent = fmt(st.U) + ' V'; render(); });
+  $('sR').addEventListener('input', e => { st.R = +e.target.value; $('oR').textContent = st.R + ' Ω'; render(); });
+  $('bSw').addEventListener('click', () => {
+    st.closed = !st.closed;
+    $('bSw').setAttribute('aria-pressed', String(st.closed));
+    $('swTxt').textContent = st.closed ? 'Fermé · vanne ouverte' : 'Ouvert · vanne fermée';
+    render();
+  });
+  const setMode = el => { st.elec = el; $('bConv').setAttribute('aria-pressed', String(!el)); $('bEl').setAttribute('aria-pressed', String(el)); render(); };
+  $('bConv').addEventListener('click', () => setMode(false));
+  $('bEl').addEventListener('click', () => setMode(true));
+  const syncRun = () => { $('bRun').textContent = st.run ? 'Pause' : 'Lecture'; $('bRun').setAttribute('aria-pressed', String(!st.run)); };
+  $('bRun').addEventListener('click', () => { st.run = !st.run; syncRun(); });
+  syncRun();
+
+  document.querySelectorAll('.panel svg').forEach(svg => {
+    svg.addEventListener('mouseover', e => { const el = e.target.closest('[data-k]'); hov = el ? el.dataset.k : null; applyHL(); });
+    svg.addEventListener('mouseleave', () => { hov = null; applyHL(); });
+    svg.addEventListener('click', e => { const el = e.target.closest('[data-k]'); if (el) { pinned = pinned === el.dataset.k ? null : el.dataset.k; applyHL(); } });
+  });
+  document.querySelectorAll('tr[data-k]').forEach(tr => {
+    const k = tr.dataset.k;
+    tr.addEventListener('mouseenter', () => { hov = k; applyHL(); });
+    tr.addEventListener('mouseleave', () => { hov = null; applyHL(); });
+    tr.addEventListener('focus', () => { hov = k; applyHL(); });
+    tr.addEventListener('blur', () => { hov = null; applyHL(); });
+    const pin = () => { pinned = pinned === k ? null : k; applyHL(); };
+    tr.addEventListener('click', pin);
+    tr.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pin(); } });
+  });
+
+  /* ---------- animation ---------- */
+  let last = performance.now();
+  function frame(t) {
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    if (st.run) {
+      const i = cur(), f = i / IMAX, v = f * 230;
+      hOff = (hOff + v * dt / hLen) % 1;
+      eOff = (((eOff + (st.elec ? -1 : 1) * v * dt / eLen) % 1) + 1) % 1;
+      rot = (rot + f * 360 * dt) % 360;
+      ir = (ir + f * 720 * dt) % 360;
+      place();
+    }
+    requestAnimationFrame(frame);
+  }
+  render();
+  requestAnimationFrame(frame);
+})();
+</script>
+
+</body></html>
